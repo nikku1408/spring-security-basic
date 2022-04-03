@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				/* URL-Access type */
 				.antMatchers("/home").permitAll().antMatchers("/welcome").authenticated().antMatchers("/student")
 				.hasAuthority("Student").antMatchers("/faculty").hasAuthority("Faculty").antMatchers("/management")
-				.hasAuthority("Management")
+				.hasAuthority("Management").anyRequest().hasAuthority("/management")
 
 				/* Login Form Details */
 				.and().formLogin().defaultSuccessUrl("/welcome", true)
