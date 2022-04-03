@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+/*For in-memory example*/
 @EnableRSocketSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -21,7 +22,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * data in db and validate but works with orm (hql, jpa) queries
 	 */
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
+		auth.inMemoryAuthentication().withUser("Ansh").password("ansh123")
+				.authorities("Student");/* password not encoded in all the cases */
+		auth.inMemoryAuthentication().withUser("Nikhil").password("nik123").authorities("Faculty");
+		auth.inMemoryAuthentication().withUser("Rohini").password("rohini123").authorities("Management");
 	}
 
 	/* Authorization means role management */
