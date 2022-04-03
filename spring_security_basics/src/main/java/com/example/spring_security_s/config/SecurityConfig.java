@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.rsocket.EnableRSocketSecur
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /*For in-memory example*/
 @EnableRSocketSecurity
@@ -29,8 +30,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	/* Authorization means role management */
-	protected void configure(HttpSecurity http) throws Exception {
+//	protected void configure(HttpSecurity http) throws Exception {
+//		http.authorizeRequests()
+//				/* For which url what access type */
+//
+//				.antMatchers("/home").permitAll().antMatchers("/welcome").authenticated().antMatchers("/student")
+//				.hasAuthority("Student").antMatchers("/common").hasAnyAuthority("Student", "Faculty")
+//				.antMatchers("/faculty").hasAuthority("Faculty").antMatchers("/management").hasAuthority("Management")
+//				.antMatchers(HttpMethod.POST, "/register").permitAll().antMatchers(HttpMethod.GET, "/register")
+//				.permitAll();
+//		/* Here common is for common roles which are selected */
+//	}
 
-		super.configure(http);
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+
+				/* URL-Access type */
+				.antMatchers("/home").permitAll().antMatchers("/welcome").authenticated().antMatchers("/student")
+				.hasAuthority("Student").antMatchers("/faculty").hasAuthority("Faculty").antMatchers("/management")
+				.hasAuthority("Management")
+
+				/* Login Form Details */
+				.and().formLogin().defaultSuccessUrl("/welcome", true)
+
+				/* Logout Details */
+				.and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+
+				/* Exception Details */
+				.and().exceptionHandling().accessDeniedPage("/denied");
+
 	}
 }
